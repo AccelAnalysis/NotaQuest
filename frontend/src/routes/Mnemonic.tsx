@@ -40,7 +40,7 @@ export default function Mnemonic() {
   const currentCard = cards[currentCardIndex] || cards[0];
 
   const nextCard = () => {
-    if (isAnimating) return;
+    if (isAnimating || cards.length === 0) return;
     setIsAnimating(true);
     setShowMnemonic(false);
     setCurrentCardIndex((prev) => (prev + 1) % cards.length);
@@ -48,7 +48,7 @@ export default function Mnemonic() {
   };
 
   const prevCard = () => {
-    if (isAnimating) return;
+    if (isAnimating || cards.length === 0) return;
     setIsAnimating(true);
     setShowMnemonic(false);
     setCurrentCardIndex((prev) => (prev - 1 + cards.length) % cards.length);
@@ -126,7 +126,30 @@ export default function Mnemonic() {
     drawNote();
   }, [currentCard, clef, drawNote]);
 
-  if (!currentCard) return null;
+  const clefAccent = clef === 'treble'
+    ? 'text-indigo-800 bg-indigo-50 border-indigo-200'
+    : 'text-emerald-800 bg-emerald-50 border-emerald-200';
+
+  const typeAccent = showType === 'space'
+    ? 'text-amber-800 bg-amber-50 border-amber-200'
+    : 'text-sky-800 bg-sky-50 border-sky-200';
+
+  const cardAccent = currentCard?.type === 'space'
+    ? 'border-amber-200 bg-amber-50'
+    : 'border-sky-200 bg-sky-50';
+
+  const isMissingContent = !currentCard?.phrase && !currentCard?.mnemonic && !currentCard?.image;
+
+  if (!currentCard) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-blue-50 p-4 flex items-center justify-center">
+        <div className="max-w-xl w-full bg-white rounded-xl shadow-lg p-6 text-center space-y-2">
+          <p className="text-lg font-semibold text-indigo-900">No mnemonic data found.</p>
+          <p className="text-sm text-gray-600">Try switching clef or line/space type to reload the study deck.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-blue-50 p-4">
@@ -178,10 +201,10 @@ export default function Mnemonic() {
                     >
                       <div className="inline-block bg-white bg-opacity-90 px-4 py-2 rounded-lg shadow-md">
                         <p className="text-lg font-medium text-indigo-700">
-                          {currentCard?.mnemonic}
+                          {currentCard?.mnemonic || 'Mnemonic unavailable'}
                         </p>
                         <p className="text-sm text-gray-600 mt-1">
-                          {MNEMONIC_PHRASES[clef][showType]}
+                          {currentCard?.phrase || MNEMONIC_PHRASES[clef][showType] || 'No phrase provided for this card.'}
                         </p>
                       </div>
                     </motion.div>
@@ -191,12 +214,30 @@ export default function Mnemonic() {
             </div>
           </div>
 
-          <div className="p-6 bg-gray-50 border-t border-gray-200">
-            <div className="flex justify-between items-center mb-6">
-              <button
-                onClick={toggleType}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  showType === 'space'
+        <div className="p-6 bg-gray-50 border-t border-gray-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap gap-2">
+              <span className={`inline-flex items-center px-3 py-1 rounded-full border text-xs font-semibold ${clefAccent}`}>
+                {currentCard.labels?.clef || `${clef === 'treble' ? 'Treble' : 'Bass'} Clef`}
+              </span>
+              <span className={`inline-flex items-center px-3 py-1 rounded-full border text-xs font-semibold ${typeAccent}`}>
+                {currentCard.labels?.staff || (showType === 'space' ? 'Space' : 'Line')}
+              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-full border border-gray-300 bg-white text-xs font-semibold text-gray-700">
+                {currentCard.labels?.position || 'Position data coming soon'}
+              </span>
+            </div>
+            <div className="text-right text-xs text-gray-500">
+              <p>Legend</p>
+              <p className="mt-1">Clef • Staff Type • Position</p>
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center mb-6">
+            <button
+              onClick={toggleType}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                showType === 'space'
                     ? 'bg-indigo-100 text-indigo-700'
                     : 'bg-blue-100 text-blue-700'
                 }`}
@@ -227,35 +268,63 @@ export default function Mnemonic() {
               </p>
             </div>
 
-            <div className="flex justify-between items-center">
-              <button
-                onClick={prevCard}
-                className="px-6 py-2 bg-indigo-100 text-indigo-700 rounded-lg font-medium hover:bg-indigo-200 transition-colors"
-                disabled={isAnimating}
-              >
-                Previous
-              </button>
-              
-              <div className="text-sm text-gray-500">
+          <div className="flex justify-between items-center">
+            <button
+              onClick={prevCard}
+              className="px-6 py-2 bg-indigo-100 text-indigo-700 rounded-lg font-medium hover:bg-indigo-200 transition-colors"
+              disabled={isAnimating || cards.length === 0}
+            >
+              Previous
+            </button>
+
+            <div className="text-sm text-gray-500">
                 Card {currentCardIndex + 1} of {cards.length}
               </div>
               
-              <button
-                onClick={nextCard}
-                className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
-                disabled={isAnimating}
-              >
-                Next
-              </button>
+            <button
+              onClick={nextCard}
+              className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+              disabled={isAnimating || cards.length === 0}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+
+        <div className={`bg-white rounded-xl shadow-md border ${cardAccent} p-6 mb-6`}>
+          <div className="grid md:grid-cols-2 gap-6 items-center">
+            <div className="space-y-3">
+              <p className="text-xs uppercase tracking-wide text-gray-500">Current Note</p>
+              <p className="text-4xl font-bold text-indigo-900">{currentCard.note}</p>
+              <p className="text-lg font-semibold text-gray-800">{currentCard.mnemonic || 'Mnemonic missing'}</p>
+              <p className="text-sm text-gray-600">{currentCard.phrase || 'No phrase provided for this position.'}</p>
+              {isMissingContent && (
+                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-3 py-2">Additional details will appear here once provided.</p>
+              )}
+            </div>
+            <div className="w-full">
+              {currentCard.image ? (
+                <img
+                  src={currentCard.image}
+                  alt={`${currentCard.note} mnemonic illustration`}
+                  className="w-full h-40 object-cover rounded-lg shadow-sm border border-gray-200"
+                />
+              ) : (
+                <div className="w-full h-40 rounded-lg border border-dashed border-gray-300 flex items-center justify-center text-gray-500 text-sm bg-gray-50">
+                  Illustration coming soon
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="text-center text-sm text-gray-500">
-          <p>Click the card to flip between note and mnemonic</p>
+          <p>Click the staff to flip between the note and its mnemonic phrase.</p>
           <div className="mt-2 flex justify-center space-x-4">
             <button
               onClick={() => {
+                if (!cards.length) return;
                 const randomIndex = Math.floor(Math.random() * cards.length);
                 setCurrentCardIndex(randomIndex);
                 setShowMnemonic(false);
