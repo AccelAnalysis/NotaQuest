@@ -8,9 +8,23 @@ export const theme = {
     text: 'var(--text-primary)',
     textMuted: 'var(--text-secondary)'
   },
+  surfaces: {
+    page: 'var(--color-page)',
+    overlay: 'var(--surface-overlay)',
+    overlayStrong: 'var(--surface-overlay-strong)',
+    card: 'var(--surface-card)',
+    contrast: 'var(--surface-contrast)'
+  },
+  borders: {
+    subtle: 'var(--border-subtle)',
+    strong: 'var(--border-strong)',
+    contrast: 'var(--border-contrast)'
+  },
   gradients: {
-    aurora: 'linear-gradient(120deg, rgba(99,102,241,0.22), rgba(124,58,237,0.18), rgba(34,211,238,0.18))',
-    nav: 'linear-gradient(120deg, rgba(8, 47, 73, 0.9), rgba(67, 56, 202, 0.82), rgba(76, 29, 149, 0.85))'
+    aurora: 'var(--gradient-aurora)',
+    auroraStrong: 'var(--gradient-aurora-strong)',
+    nav: 'var(--gradient-nav)',
+    pageOverlay: 'var(--gradient-page-overlay)'
   },
   shadows: {
     soft: 'var(--shadow-soft)',
