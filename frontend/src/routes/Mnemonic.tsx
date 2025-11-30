@@ -185,27 +185,33 @@ export default function Mnemonic() {
   }
 
   return (
-    <div className="min-h-screen p-4" style={{ background: theme.gradients.pageOverlay, color: theme.palette.text }}>
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen p-4 sm:p-6" style={{ background: theme.gradients.pageOverlay, color: theme.palette.text }}>
+      <div
+        className="mx-auto space-y-4"
+        style={{ maxWidth: 'clamp(320px, 95vw, 1100px)' }}
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2 sm:mb-4">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center transition-colors"
+            className="flex items-center gap-2 transition-colors text-sm sm:text-base"
             style={{ color: theme.palette.secondary }}
           >
-            <FaArrowLeft className="mr-2" /> Back to Home
+            <FaArrowLeft /> Back to Home
           </button>
-          <h1 className="text-2xl font-bold text-center" style={{ color: theme.palette.text }}>
+          <h1
+            className="font-bold text-center sm:text-left"
+            style={{ color: theme.palette.text, fontSize: 'clamp(1.35rem, 2vw + 1rem, 2.35rem)' }}
+          >
             NotaQuest - Staff Position Mnemonics
           </h1>
-          <div className="w-24"></div>
+          <div className="hidden sm:block w-24"></div>
         </div>
 
         <div
-          className="rounded-xl shadow-lg overflow-hidden mb-8"
+          className="rounded-xl shadow-lg overflow-hidden mb-6 sm:mb-8"
           style={{ backgroundColor: theme.surfaces.contrast, border: `1px solid ${theme.borders.contrast}` }}
         >
-          <div className="relative h-64 p-6">
+          <div className="relative h-64 p-4 sm:p-6">
             <div
               className="relative h-full"
               style={{ borderBottom: `2px solid ${theme.borders.contrast}`, borderTop: `2px solid ${theme.borders.contrast}` }}
@@ -240,13 +246,19 @@ export default function Mnemonic() {
                       className="absolute bottom-4 left-0 right-0 text-center"
                     >
                       <div
-                        className="inline-block px-4 py-2 rounded-lg shadow-md"
+                        className="inline-block px-4 py-3 rounded-lg shadow-md"
                         style={{ backgroundColor: theme.surfaces.contrast }}
                       >
-                        <p className="text-lg font-medium" style={{ color: theme.palette.primaryStrong }}>
+                        <p
+                          className="font-medium"
+                          style={{ color: theme.palette.primaryStrong, fontSize: 'clamp(1rem, 1vw + 1rem, 1.25rem)' }}
+                        >
                           {currentCard?.mnemonic || 'Mnemonic unavailable'}
                         </p>
-                        <p className="text-sm mt-1" style={{ color: theme.palette.textMuted }}>
+                        <p
+                          className="mt-1"
+                          style={{ color: theme.palette.textMuted, fontSize: 'clamp(0.9rem, 1vw + 0.85rem, 1.05rem)' }}
+                        >
                           {currentCard?.phrase || MNEMONIC_PHRASES[clef][showType] || 'No phrase provided for this card.'}
                         </p>
                       </div>
@@ -258,10 +270,10 @@ export default function Mnemonic() {
           </div>
 
         <div
-          className="p-6"
+          className="p-4 sm:p-6 space-y-4"
           style={{ backgroundColor: theme.surfaces.overlayStrong, borderTop: `1px solid ${theme.borders.subtle}` }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex flex-wrap gap-2">
               <span
                 className="inline-flex items-center px-3 py-1 rounded-full border text-xs font-semibold"
@@ -292,11 +304,12 @@ export default function Mnemonic() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
             <button
               onClick={toggleType}
               className="px-4 py-2 rounded-lg font-medium transition-colors"
               style={{
+                minHeight: '44px',
                 backgroundColor: showType === 'space' ? theme.surfaces.contrast : theme.surfaces.overlay,
                 color: showType === 'space' ? theme.palette.accent : theme.palette.secondary,
                 border: `1px solid ${theme.borders.subtle}`
@@ -309,6 +322,7 @@ export default function Mnemonic() {
               onClick={toggleClef}
               className="px-4 py-2 rounded-lg font-medium transition-colors"
               style={{
+                minHeight: '44px',
                 backgroundColor: theme.surfaces.contrast,
                 color: theme.palette.text,
                 border: `1px solid ${theme.borders.contrast}`
@@ -321,6 +335,7 @@ export default function Mnemonic() {
               onClick={toggleMnemonic}
               className="px-4 py-2 rounded-lg font-medium transition-colors"
               style={{
+                minHeight: '44px',
                 backgroundColor: theme.surfaces.overlay,
                 color: theme.palette.primaryStrong,
                 border: `1px solid ${theme.borders.strong}`
@@ -330,20 +345,24 @@ export default function Mnemonic() {
             </button>
           </div>
 
-          <div className="text-center mb-4">
-            <p className="text-lg font-medium" style={{ color: theme.palette.text }}>
+          <div className="text-center">
+            <p
+              className="font-medium"
+              style={{ color: theme.palette.text, fontSize: 'clamp(1.05rem, 1vw + 1rem, 1.35rem)' }}
+            >
               {showType === 'space'
                 ? clef === 'treble' ? 'F-A-C-E (Space notes)' : 'A-C-E-G (Space notes)'
                 : clef === 'treble' ? 'E-G-B-D-F (Line notes)' : 'G-B-D-F-A (Line notes)'}
               </p>
             </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <button
               onClick={prevCard}
               className="px-6 py-2 rounded-lg font-medium transition-colors"
               disabled={isAnimating || cards.length === 0}
               style={{
+                minHeight: '44px',
                 backgroundColor: theme.surfaces.overlay,
                 color: theme.palette.primary,
                 border: `1px solid ${theme.borders.subtle}`
@@ -361,6 +380,7 @@ export default function Mnemonic() {
               className="px-6 py-2 rounded-lg font-medium transition-colors"
               disabled={isAnimating || cards.length === 0}
               style={{
+                minHeight: '44px',
                 backgroundColor: theme.palette.primaryStrong,
                 color: theme.palette.text,
                 border: `1px solid ${theme.borders.strong}`
@@ -373,24 +393,35 @@ export default function Mnemonic() {
       </div>
 
         <div
-          className="rounded-xl shadow-md border p-6 mb-6"
+          className="rounded-xl shadow-md border p-4 sm:p-6 mb-6"
           style={{
             ...cardAccent,
-            boxShadow: theme.shadows.soft
+            boxShadow: theme.shadows.soft,
+            maxWidth: 'clamp(320px, 95vw, 1100px)',
+            margin: '0 auto'
           }}
         >
-          <div className="grid md:grid-cols-2 gap-6 items-center">
-            <div className="space-y-3">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 items-start">
+            <div className="space-y-3" style={{ maxWidth: 'min(540px, 100%)' }}>
               <p className="text-xs uppercase tracking-wide" style={{ color: theme.palette.textMuted }}>
                 Current Note
               </p>
-              <p className="text-4xl font-bold" style={{ color: theme.palette.primaryStrong }}>
+              <p
+                className="font-bold"
+                style={{ color: theme.palette.primaryStrong, fontSize: 'clamp(2rem, 2.5vw + 1.5rem, 2.75rem)' }}
+              >
                 {currentCard.note}
               </p>
-              <p className="text-lg font-semibold" style={{ color: theme.palette.text }}>
+              <p
+                className="font-semibold"
+                style={{ color: theme.palette.text, fontSize: 'clamp(1.1rem, 1vw + 1rem, 1.4rem)' }}
+              >
                 {currentCard.mnemonic || 'Mnemonic missing'}
               </p>
-              <p className="text-sm" style={{ color: theme.palette.textMuted }}>
+              <p
+                className="text-sm"
+                style={{ color: theme.palette.textMuted, fontSize: 'clamp(0.95rem, 0.8vw + 0.9rem, 1.1rem)' }}
+              >
                 {currentCard.phrase || 'No phrase provided for this position.'}
               </p>
               {isMissingContent && (
@@ -406,17 +437,17 @@ export default function Mnemonic() {
                 </p>
               )}
             </div>
-            <div className="w-full">
+            <div className="w-full" style={{ maxWidth: 'min(520px, 100%)' }}>
               {currentCard.image ? (
                 <img
                   src={currentCard.image}
                   alt={`${currentCard.note} mnemonic illustration`}
-                  className="w-full h-40 object-cover rounded-lg shadow-sm"
+                  className="w-full max-h-56 object-contain rounded-lg shadow-sm mx-auto"
                   style={{ border: `1px solid ${theme.borders.contrast}` }}
                 />
               ) : (
                 <div
-                  className="w-full h-40 rounded-lg border border-dashed flex items-center justify-center text-sm"
+                  className="w-full h-40 sm:h-48 rounded-lg border border-dashed flex items-center justify-center text-sm"
                   style={{
                     borderColor: theme.borders.contrast,
                     color: theme.palette.textMuted,
@@ -432,7 +463,7 @@ export default function Mnemonic() {
 
         <div className="text-center text-sm" style={{ color: theme.palette.textMuted }}>
           <p>Click the staff to flip between the note and its mnemonic phrase.</p>
-          <div className="mt-2 flex justify-center space-x-4">
+          <div className="mt-3 flex flex-col sm:flex-row justify-center gap-2 sm:space-x-4 sm:gap-0">
             <button
               onClick={() => {
                 if (!cards.length) return;
@@ -440,14 +471,14 @@ export default function Mnemonic() {
                 setCurrentCardIndex(randomIndex);
                 setShowMnemonic(false);
               }}
-              className="flex items-center text-sm"
+              className="flex items-center justify-center text-sm px-3 py-2 rounded-md"
               style={{ color: theme.palette.text }}
             >
               <FaRandom className="mr-1" /> Random Card
             </button>
             <button
               onClick={toggleMnemonic}
-              className="flex items-center text-sm"
+              className="flex items-center justify-center text-sm px-3 py-2 rounded-md"
               style={{ color: theme.palette.text }}
             >
               <FaMusic className="mr-1" /> {showMnemonic ? 'Show Note' : 'Show Mnemonic'}
