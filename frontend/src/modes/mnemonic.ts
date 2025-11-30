@@ -1,17 +1,4 @@
-export interface MnemonicCard {
-  note: string;
-  mnemonic: string;
-  phrase: string;
-  type: 'space' | 'line';
-  position: number;
-  clef: 'treble' | 'bass';
-  image?: string;
-  labels: {
-    clef: string;
-    staff: string;
-    position: string;
-  };
-}
+import { MnemonicCard } from '../types/mnemonic';
 
 export const MNEMONIC_CARDS: MnemonicCard[] = [
   // Treble Clef Space notes (F-A-C-E)
@@ -274,7 +261,7 @@ export const MNEMONIC_PHRASES = {
   }
 };
 
-export const getCardsByType = (type: 'space' | 'line', clef: 'treble' | 'bass') => {
+export const getCardsByType = (type: 'space' | 'line', clef: 'treble' | 'bass'): MnemonicCard[] => {
   return MNEMONIC_CARDS.filter(card => card.type === type && card.clef === clef)
     .sort((a, b) => a.position - b.position);
 };

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MNEMONIC_CARDS, MNEMONIC_PHRASES, getCardsByType } from '../modes/mnemonic';
+import { MnemonicCard } from '../types/mnemonic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaArrowLeft, FaMusic, FaRandom } from 'react-icons/fa';
 import { Renderer, Stave, StaveNote, Voice, Formatter, Accidental } from 'vexflow';
@@ -11,7 +12,7 @@ export default function Mnemonic() {
   const [showMnemonic, setShowMnemonic] = useState(false);
   const [showType, setShowType] = useState<'space' | 'line'>('space');
   const [clef, setClef] = useState<'treble' | 'bass'>('treble');
-  const [cards, setCards] = useState<typeof MNEMONIC_CARDS>([]);
+  const [cards, setCards] = useState<MnemonicCard[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const navigate = useNavigate();
 
