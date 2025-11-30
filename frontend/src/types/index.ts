@@ -6,3 +6,5 @@ export interface Note {
   clef: 'treble' | 'bass';
   accidental?: 'b' | '#';
 }
+
+export type { MnemonicCard } from './mnemonic';
