@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { getProfile } from '../services/gamification';
 import { useAuth } from '../context/AuthContext';
 import NavBar from '../components/NavBar';
+import { theme } from '../theme';
 type GameMode = 'treble' | 'bass' | 'both';
 
 const gameModes = [
@@ -77,14 +78,17 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-900">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: theme.surfaces.page }}>
       <NavBar />
       
       {/* Main Content with Background */}
       <main className="flex-grow relative overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/90"></div>
+          <div
+            className="absolute inset-0"
+            style={{ background: theme.gradients.pageOverlay }}
+          ></div>
           <div 
             className="absolute inset-0 bg-cover bg-center opacity-30"
             style={{
@@ -101,22 +105,35 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-900/30 border border-indigo-500/30 mb-6">
-              <FaMusic className="mr-2 text-indigo-400" />
-              <span className="text-indigo-300 font-medium">Music Theory Mastery</span>
+            <div
+              className="inline-flex items-center px-4 py-2 rounded-full mb-6"
+              style={{
+                backgroundColor: theme.surfaces.overlay,
+                border: `1px solid ${theme.borders.strong}`
+              }}
+            >
+              <FaMusic className="mr-2" style={{ color: theme.palette.primaryStrong }} />
+              <span className="font-medium" style={{ color: theme.palette.secondary }}>
+                Music Theory Mastery
+              </span>
             </div>
-            
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              Learn to Read <span className="text-indigo-400">Music</span>
+
+            <h1 className="text-5xl md:text-7xl font-bold mb-6" style={{ color: theme.palette.text }}>
+              Learn to Read <span style={{ color: theme.palette.primaryStrong }}>Music</span>
             </h1>
-            
-            <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+
+            <p className="text-xl mb-10 max-w-2xl mx-auto" style={{ color: theme.palette.textMuted }}>
               Master musical notation through interactive exercises and games. Perfect for beginners and experienced musicians alike.
             </p>
 
             {/* Game Mode Selection */}
             <div className="max-w-5xl mx-auto mb-10 w-full">
-              <p className="text-sm text-indigo-200 uppercase tracking-[0.2em] mb-3">Choose your focus</p>
+              <p
+                className="text-sm uppercase tracking-[0.2em] mb-3"
+                style={{ color: theme.palette.secondary }}
+              >
+                Choose your focus
+              </p>
               <div className="grid gap-4 md:gap-6 md:grid-cols-3">
                 {gameModes.map((mode) => {
                   const Icon = mode.icon;
@@ -127,35 +144,69 @@ export default function Home() {
                       key={mode.id}
                       type="button"
                       onClick={() => setSelectedMode(mode.id)}
-                      className={`group relative w-full text-left rounded-2xl border transition-all duration-300 p-6 backdrop-blur bg-gray-800/60 hover:bg-gray-800/90 hover:-translate-y-1 ${
-                        isSelected ? 'border-indigo-500/70 shadow-lg shadow-indigo-500/20' : 'border-gray-700'
-                      }`}
+                      className="group relative w-full text-left rounded-2xl border transition-all duration-300 p-6 backdrop-blur hover:-translate-y-1"
+                      style={{
+                        backgroundColor: isSelected ? theme.surfaces.overlayStrong : theme.surfaces.overlay,
+                        borderColor: isSelected ? theme.borders.strong : theme.borders.subtle,
+                        boxShadow: isSelected ? theme.shadows.glow : theme.shadows.soft,
+                        color: theme.palette.text
+                      }}
                     >
                       <div className="flex items-start gap-4">
                         <div
-                          className={`rounded-xl p-3 flex items-center justify-center shrink-0 transition-colors duration-300 ${
-                            isSelected ? 'bg-indigo-600 text-white' : 'bg-indigo-900/40 text-indigo-200'
-                          }`}
+                          className="rounded-xl p-3 flex items-center justify-center shrink-0 transition-colors duration-300"
+                          style={{
+                            background: isSelected ? theme.gradients.auroraStrong : theme.gradients.aurora,
+                            color: isSelected ? theme.palette.text : theme.palette.text
+                          }}
                         >
                           <Icon className="h-6 w-6" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-xs uppercase tracking-[0.18em] text-indigo-300 mb-1">{mode.focus}</p>
-                          <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+                          <p className="text-xs uppercase tracking-[0.18em] mb-1" style={{ color: theme.palette.secondary }}>
+                            {mode.focus}
+                          </p>
+                          <h3 className="text-xl font-semibold mb-2 flex items-center gap-2" style={{ color: theme.palette.text }}>
                             {mode.name}
-                            {isSelected && <span className="text-xs font-medium text-indigo-200 bg-indigo-900/50 px-2 py-0.5 rounded-full">Selected</span>}
+                            {isSelected && (
+                              <span
+                                className="text-xs font-medium px-2 py-0.5 rounded-full"
+                                style={{
+                                  backgroundColor: theme.surfaces.overlay,
+                                  color: theme.palette.secondary,
+                                  border: `1px solid ${theme.borders.subtle}`
+                                }}
+                              >
+                                Selected
+                              </span>
+                            )}
                           </h3>
-                          <p className="text-sm text-gray-300 mb-3 leading-relaxed">{mode.description}</p>
-                          <p className="text-xs text-indigo-200 bg-indigo-900/40 border border-indigo-700/50 rounded-lg px-3 py-2 inline-flex items-center gap-2">
-                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-indigo-400" />
+                          <p className="text-sm mb-3 leading-relaxed" style={{ color: theme.palette.textMuted }}>
+                            {mode.description}
+                          </p>
+                          <p
+                            className="text-xs rounded-lg px-3 py-2 inline-flex items-center gap-2"
+                            style={{
+                              color: theme.palette.secondary,
+                              backgroundColor: theme.surfaces.overlay,
+                              border: `1px solid ${theme.borders.subtle}`
+                            }}
+                          >
+                            <span
+                              className="inline-block h-1.5 w-1.5 rounded-full"
+                              style={{ backgroundColor: theme.palette.secondary }}
+                            />
                             {mode.recommendation}
                           </p>
                         </div>
                       </div>
                       <div
-                        className={`absolute inset-0 rounded-2xl border pointer-events-none transition-opacity duration-300 ${
-                          isSelected ? 'border-indigo-400/40 opacity-100' : 'border-transparent opacity-0 group-hover:opacity-100 group-hover:border-indigo-300/30'
-                        }`}
+                        className="absolute inset-0 rounded-2xl border pointer-events-none transition-opacity duration-300"
+                        style={{
+                          borderColor: theme.borders.strong,
+                          opacity: isSelected ? 1 : 0,
+                          background: isSelected ? theme.gradients.aurora : 'transparent'
+                        }}
                       ></div>
                     </button>
                   );
@@ -168,40 +219,62 @@ export default function Home() {
               onClick={startGame}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              className="relative inline-flex items-center justify-center px-10 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xl font-semibold rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all duration-300 overflow-hidden group"
+              className="relative inline-flex items-center justify-center px-10 py-5 text-xl font-semibold rounded-xl transition-all duration-300 overflow-hidden group"
+              style={{
+                background: theme.gradients.auroraStrong,
+                color: theme.palette.text,
+                boxShadow: theme.shadows.glow,
+                border: `1px solid ${theme.borders.strong}`
+              }}
             >
               <span className="relative z-10 flex items-center">
                 <FaGamepad className="mr-3" />
                 Start Practicing
                 <FaArrowRight className="ml-3 transition-transform duration-300 group-hover:translate-x-1" />
               </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-indigo-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              <span
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: theme.gradients.aurora }}
+              ></span>
             </motion.button>
           </motion.div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900/80 backdrop-blur-sm border-t border-gray-800 py-6">
+      <footer
+        className="backdrop-blur-sm border-t py-6"
+        style={{ backgroundColor: theme.surfaces.overlayStrong, borderColor: theme.borders.subtle }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
-              <FaMusic className="h-6 w-6 text-indigo-500" />
-              <span className="ml-2 text-xl font-bold text-white">NotaQuest</span>
+              <FaMusic className="h-6 w-6" style={{ color: theme.palette.secondary }} />
+              <span className="ml-2 text-xl font-bold" style={{ color: theme.palette.text }}>
+                NotaQuest
+              </span>
             </div>
             <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">About</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Features</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Contact</a>
+              <a href="#" className="transition-colors" style={{ color: theme.palette.textMuted }}>
+                About
+              </a>
+              <a href="#" className="transition-colors" style={{ color: theme.palette.textMuted }}>
+                Features
+              </a>
+              <a href="#" className="transition-colors" style={{ color: theme.palette.textMuted }}>
+                Contact
+              </a>
               {token && (
-                <Link to="/progress" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/progress" className="transition-colors" style={{ color: theme.palette.textMuted }}>
                   My Progress
                 </Link>
               )}
             </div>
           </div>
           <div className="mt-6 text-center md:text-left">
-            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} NotaQuest. All rights reserved.</p>
+            <p className="text-sm" style={{ color: theme.palette.textMuted }}>
+              &copy; {new Date().getFullYear()} NotaQuest. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>

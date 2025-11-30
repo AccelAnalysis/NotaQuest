@@ -19,8 +19,10 @@ export default function NavBar() {
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center gap-4">
             <Link to="/" className="flex-shrink-0 flex items-center px-3 py-2 rounded-full glass-surface radiant-border">
-              <FaMusic className="h-8 w-8 text-indigo-300" />
-              <span className="ml-2 text-xl font-bold text-white">NotaQuest</span>
+              <FaMusic className="h-8 w-8" style={{ color: theme.palette.secondary }} />
+              <span className="ml-2 text-xl font-bold" style={{ color: theme.palette.text }}>
+                NotaQuest
+              </span>
             </Link>
             <div className="hidden md:flex md:space-x-1">
               <NavLink to="/" icon={<FaHome />} text="Home" />
@@ -32,10 +34,11 @@ export default function NavBar() {
             {token ? (
               <button
                 onClick={logout}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white shadow-md"
+                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg shadow-md"
                 style={{
                   background: theme.gradients.aurora,
-                  boxShadow: theme.shadows.glow
+                  boxShadow: theme.shadows.glow,
+                  color: theme.palette.text
                 }}
               >
                 <FaUser className="mr-2" />
@@ -44,10 +47,11 @@ export default function NavBar() {
             ) : (
               <Link
                 to="/login"
-                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white shadow-md"
+                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg shadow-md"
                 style={{
                   background: theme.gradients.aurora,
-                  boxShadow: theme.shadows.glow
+                  boxShadow: theme.shadows.glow,
+                  color: theme.palette.text
                 }}
               >
                 <FaUser className="mr-2" />
@@ -65,10 +69,12 @@ function NavLink({ to, icon, text }: { to: string; icon: React.ReactNode; text: 
   return (
     <Link
       to={to}
-      className="inline-flex items-center px-3 py-2 text-sm font-medium text-slate-200 rounded-lg transition-all duration-200 hover:text-white"
+      className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:opacity-100"
       style={{
-        border: `1px solid ${theme.palette.surface}`,
-        backgroundColor: 'rgba(255, 255, 255, 0.04)'
+        border: `1px solid ${theme.borders.subtle}`,
+        backgroundColor: theme.surfaces.overlay,
+        color: theme.palette.textMuted,
+        opacity: 0.9
       }}
     >
       <span className="mr-2 opacity-80">{icon}</span>

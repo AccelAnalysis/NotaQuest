@@ -1,6 +1,10 @@
 :root {
   --color-page: #050712;
   --color-surface: rgba(255, 255, 255, 0.04);
+  --surface-overlay: rgba(255, 255, 255, 0.06);
+  --surface-overlay-strong: rgba(7, 11, 26, 0.75);
+  --surface-card: #0b1024;
+  --surface-contrast: #ffffff;
   --color-primary: #7c3aed;
   --color-primary-strong: #6366f1;
   --color-secondary: #22d3ee;
@@ -8,9 +12,16 @@
   --text-primary: #e5e7eb;
   --text-secondary: #c7c9d3;
   --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(124, 58, 237, 0.35);
+  --border-contrast: #d4d7dd;
   --glass-blur: 14px;
   --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.35);
   --shadow-glow: 0 10px 40px rgba(99, 102, 241, 0.35);
+
+  --gradient-aurora: linear-gradient(120deg, rgba(99, 102, 241, 0.22), rgba(124, 58, 237, 0.18), rgba(34, 211, 238, 0.18));
+  --gradient-aurora-strong: linear-gradient(120deg, #6366f1, #7c3aed, #22d3ee);
+  --gradient-nav: linear-gradient(120deg, rgba(8, 47, 73, 0.9), rgba(67, 56, 202, 0.82), rgba(76, 29, 149, 0.85));
+  --gradient-page-overlay: linear-gradient(180deg, rgba(5, 7, 18, 0.75), rgba(5, 7, 18, 0.92));
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
