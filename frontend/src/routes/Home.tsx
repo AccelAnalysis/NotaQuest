@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaGamepad, FaMusic, FaArrowRight, FaGuitar, FaLayerGroup } from 'react-icons/fa';
+import {
+  FaGamepad,
+  FaMusic,
+  FaArrowRight,
+  FaGuitar,
+  FaLayerGroup,
+  FaHeadphones,
+  FaBookOpen,
+  FaBolt,
+  FaBrain
+} from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { getProfile } from '../services/gamification';
 import { useAuth } from '../context/AuthContext';
@@ -45,8 +55,8 @@ const gameModes = [
 export default function Home() {
   const [selectedMode, setSelectedMode] = useState<GameMode>('treble');
   // Profile state will be used in a future update
-  const [profile] = useState<{ level: number; xp: number } | null>(null);
-  const [isLoading] = useState(false);
+  const [profile, setProfile] = useState<{ level: number; xp: number } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuth();
   const navigate = useNavigate();
 
@@ -77,6 +87,53 @@ export default function Home() {
     navigate(`/play?mode=${selectedMode}`);
   };
 
+  const practiceLabs = [
+    {
+      id: 'ear-training',
+      title: 'Ear Training Lab',
+      description: 'Identify intervals and train your musical intuition with audio-first drills.',
+      icon: FaHeadphones,
+      href: '/ear-training',
+      badge: 'Intervals • Audio',
+      image:
+        'https://images.unsplash.com/photo-1507878866276-a947ef722fee?auto=format&fit=crop&w=900&q=80',
+      accent: theme.palette.secondary
+    },
+    {
+      id: 'mnemonics',
+      title: 'Mnemonic Flashcards',
+      description: 'Memorize lines and spaces with vivid phrases, color accents, and imagery.',
+      icon: FaBookOpen,
+      href: '/mnemonic',
+      badge: 'Treble • Bass',
+      image:
+        'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=900&q=80',
+      accent: theme.palette.accent
+    },
+    {
+      id: 'sight-reading',
+      title: 'Sight Reading Studio',
+      description: 'Read melodies on the staff with tempo-aware guidance and instant feedback.',
+      icon: FaBolt,
+      href: '/sight-reading',
+      badge: 'Tempo • Rhythm',
+      image:
+        'https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?auto=format&fit=crop&w=900&q=80',
+      accent: theme.palette.primaryStrong
+    },
+    {
+      id: 'intervals',
+      title: 'Interval Trainer',
+      description: 'Practice interval jumps on a visual staff and reinforce theory with XP rewards.',
+      icon: FaBrain,
+      href: '/intervals',
+      badge: 'Staff • Theory',
+      image:
+        'https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=900&q=80',
+      accent: theme.palette.text
+    }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: theme.surfaces.page }}>
       <NavBar />
@@ -99,7 +156,7 @@ export default function Home() {
 
         {/* Hero Content */}
         <div className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div 
+          <motion.div
             className="max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -125,6 +182,73 @@ export default function Home() {
             <p className="text-xl mb-10 max-w-2xl mx-auto" style={{ color: theme.palette.textMuted }}>
               Master musical notation through interactive exercises and games. Perfect for beginners and experienced musicians alike.
             </p>
+
+            <div className="grid gap-6 md:grid-cols-[1.2fr,0.8fr] mb-10 items-stretch">
+              <div
+                className="relative overflow-hidden rounded-3xl p-6 md:p-8 text-left"
+                style={{
+                  background: theme.gradients.aurora,
+                  boxShadow: theme.shadows.glow,
+                  border: `1px solid ${theme.borders.strong}`
+                }}
+              >
+                <div className="absolute inset-0 opacity-50 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.12),transparent_35%)]" />
+                <div className="relative z-10 space-y-4">
+                  <p className="text-sm uppercase tracking-[0.2em]" style={{ color: theme.palette.text }}>
+                    Practice that feels like play
+                  </p>
+                  <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: theme.palette.text }}>
+                    Guided sessions, live feedback, and visuals to keep you motivated.
+                  </h2>
+                  <p className="text-base md:text-lg" style={{ color: theme.palette.text }}>
+                    Switch between clefs instantly, see mnemonics on the staff, and jump into ear training without leaving the home screen.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {["Ear Training", "Sight Reading", "Flashcards", "Intervals"].map((label) => (
+                      <span
+                        key={label}
+                        className="text-xs px-3 py-2 rounded-full"
+                        style={{
+                          backgroundColor: theme.surfaces.overlay,
+                          color: theme.palette.text,
+                          border: `1px solid ${theme.borders.subtle}`
+                        }}
+                      >
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="relative rounded-3xl overflow-hidden min-h-[280px]"
+                style={{ border: `1px solid ${theme.borders.subtle}`, boxShadow: theme.shadows.soft }}
+              >
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{
+                    backgroundImage:
+                      'url(https://images.unsplash.com/photo-1484573026400-351044c1c1c7?auto=format&fit=crop&w=1200&q=80)'
+                  }}
+                ></div>
+                <div
+                  className="absolute inset-0"
+                  style={{ background: 'linear-gradient(180deg, rgba(5, 7, 18, 0.4), rgba(5, 7, 18, 0.85))' }}
+                ></div>
+                <div className="relative z-10 h-full w-full flex flex-col justify-end p-6 text-left">
+                  <p className="text-sm uppercase tracking-[0.2em] mb-2" style={{ color: theme.palette.secondary }}>
+                    Visual Story
+                  </p>
+                  <h3 className="text-2xl font-semibold mb-2" style={{ color: theme.palette.text }}>
+                    Colorful imagery keeps practice inspiring
+                  </h3>
+                  <p className="text-sm" style={{ color: theme.palette.textMuted }}>
+                    Scenic backdrops, glowing gradients, and instrument shots add atmosphere to every session.
+                  </p>
+                </div>
+              </div>
+            </div>
 
             {/* Game Mode Selection */}
             <div className="max-w-5xl mx-auto mb-10 w-full">
@@ -237,6 +361,95 @@ export default function Home() {
                 style={{ background: theme.gradients.aurora }}
               ></span>
             </motion.button>
+          </motion.div>
+
+          <motion.div
+            className="relative z-10 max-w-6xl mx-auto mt-16 w-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <p className="text-sm uppercase tracking-[0.2em] mb-2" style={{ color: theme.palette.secondary }}>
+                  Jump into any mode
+                </p>
+                <h2 className="text-3xl font-bold" style={{ color: theme.palette.text }}>
+                  Practice Labs with visuals and audio
+                </h2>
+              </div>
+              <span
+                className="px-3 py-2 rounded-full text-xs font-medium"
+                style={{
+                  backgroundColor: theme.surfaces.overlay,
+                  border: `1px solid ${theme.borders.subtle}`,
+                  color: theme.palette.text
+                }}
+              >
+                More colorful, more accessible
+              </span>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              {practiceLabs.map((lab) => {
+                const Icon = lab.icon;
+                return (
+                  <Link
+                    key={lab.id}
+                    to={lab.href}
+                    className="group relative overflow-hidden rounded-3xl border flex flex-col md:flex-row"
+                    style={{
+                      backgroundColor: theme.surfaces.overlay,
+                      borderColor: theme.borders.subtle,
+                      boxShadow: theme.shadows.soft
+                    }}
+                  >
+                    <div
+                      className="md:w-1/2 relative min-h-[220px]"
+                      style={{ borderRight: `1px solid ${theme.borders.subtle}` }}
+                    >
+                      <div
+                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                        style={{ backgroundImage: `url(${lab.image})` }}
+                      ></div>
+                      <div
+                        className="absolute inset-0"
+                        style={{ background: 'linear-gradient(180deg, rgba(5,7,18,0.35), rgba(5,7,18,0.85))' }}
+                      ></div>
+                      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                        <span
+                          className="px-3 py-2 rounded-full text-xs font-semibold"
+                          style={{
+                            backgroundColor: theme.surfaces.overlay,
+                            border: `1px solid ${theme.borders.subtle}`,
+                            color: theme.palette.text
+                          }}
+                        >
+                          {lab.badge}
+                        </span>
+                        <Icon className="h-6 w-6" style={{ color: lab.accent }} />
+                      </div>
+                    </div>
+
+                    <div className="flex-1 p-6 md:p-8 text-left flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <h3 className="text-2xl font-semibold flex items-center gap-3" style={{ color: theme.palette.text }}>
+                          <Icon className="h-6 w-6" style={{ color: lab.accent }} />
+                          {lab.title}
+                        </h3>
+                        <p className="text-sm leading-relaxed" style={{ color: theme.palette.textMuted }}>
+                          {lab.description}
+                        </p>
+                      </div>
+                      <div className="mt-6 flex items-center gap-2 text-sm font-semibold" style={{ color: lab.accent }}>
+                        Explore now
+                        <FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </motion.div>
         </div>
       </main>
