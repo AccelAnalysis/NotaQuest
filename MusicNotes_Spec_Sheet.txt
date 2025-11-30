@@ -1,0 +1,142 @@
+# Music Notation Game Spec Sheet
+
+## Overview
+This spec sheet outlines the functional requirements, feature list, and data-model sketch for a comprehensive music notation game titled **NotaQuest**. NotaQuest is designed as an engaging, gamified platform for learning, practicing, composing, and exploring music notation. It integrates elements of education, creativity, and interactivity, drawing from public-domain music libraries for content.
+
+The game emphasizes a **colorful visual design** to enhance user engagement:
+- **Vibrant color palette**: Use bright, harmonious colors inspired by music (e.g., blues and greens for calm learning modes, reds and oranges for challenging gameplay, purples for creative composition). Backgrounds feature subtle musical motifs like swirling notes or staves in pastel shades.
+- **Themed UI elements**: Buttons, icons, and progress bars use gradient fills (e.g., a rainbow spectrum for note recognition). Animations include colorful particle effects for correct answers (e.g., exploding stars in gold/yellow) and gentle fades for hints.
+- **Accessibility in color**: High-contrast modes for color-blind users, with options to customize schemes.
+
+The game is geared towards **three experience groups**:
+- **Beginner**: Focus on basics with simplified interfaces, guided tutorials, and forgiving mechanics (e.g., unlimited hints, slower pacing).
+- **Intermediate**: Builds on fundamentals with moderate challenges, introducing complexity and requiring some independence.
+- **Advanced**: Deep dives into sophisticated notation, composition, and analysis, with competitive elements and minimal hand-holding.
+
+The game supports cross-platform play (web, mobile, desktop) and uses standard formats like MusicXML for interoperability.
+
+## Functional Requirements
+### Core Functionality
+- **User Authentication and Profiles**: Secure login (email/social), profile creation with experience level selection (Beginner/Intermediate/Advanced). Track progress, achievements, and custom settings.
+- **Content Sourcing**: Integrate with public-domain libraries (e.g., IMSLP, Mutopia, CPDL) via API or imports. Allow user uploads of free-licensed scores.
+- **Notation Rendering and Editing**: Real-time display and manipulation of musical scores using a library like VexFlow or ABC.js for colorful, interactive staves.
+- **Audio Playback**: Synthesized MIDI/audio rendering with instrument variety. Support for high-fidelity samples in advanced modes.
+- **Input Methods**: Mouse/keyboard for notation entry, MIDI device support, virtual instruments (piano/guitar fretboard). Touch-friendly for mobile.
+- **Gamification Engine**: XP system, levels, badges. Adaptive difficulty based on user performance and selected experience group.
+- **Community Features**: Sharing via links or in-app gallery. Real-time collaboration for co-composition (e.g., via WebSockets).
+- **Accessibility**: Screen-reader compatibility, zoom controls, alternative inputs (e.g., voice commands for note entry).
+- **Performance and Security**: Handle up to 10,000 concurrent users; ensure data privacy for user compositions.
+
+### Technical Requirements
+- **Frontend**: React.js or Vue.js for dynamic UI, with Canvas/WebGL for colorful animations.
+- **Backend**: Node.js or Python (Flask/Django) for user data, content processing. Use Partitura library for symbolic music handling.
+- **Database**: PostgreSQL or MongoDB for storing user profiles, scores, and progress.
+- **Integration Tools**: Audiveris for OMR (scanned sheet music import). Export to MusicXML, MIDI, PDF.
+- **Deployment**: Cloud-based (AWS/GCP) for scalability, with offline mode for basic features.
+
+### Non-Functional Requirements
+- **Performance**: Load times <2 seconds; smooth playback at 60fps.
+- **Usability**: Intuitive drag-and-drop for notation; colorful tooltips/hints.
+- **Scalability**: Modular design to add new genres/instruments.
+- **Legal**: Ensure all sourced content is public-domain or licensed; user agreements for shared compositions.
+
+## Feature List
+Features are categorized by core components, with tailoring for the three experience groups. Each feature includes gamification elements like XP rewards and badges.
+
+### 1. Notation Reading & Recognition
+- **Flash-Card Challenges**: Identify notes, clefs, signatures. Color-coded notes (e.g., C in blue, D in green) for visual aid.
+  - Beginner: Single notes on treble clef; unlimited time.
+  - Intermediate: Full measures with accidentals; timed rounds.
+  - Advanced: Polyphonic excerpts; minimal hints.
+- **Sight-Reading Exercises**: Display passage; user plays via input device. Visual feedback with colorful highlights (green for correct, red for errors).
+  - Beginner: Simple melodies; auto-correct on.
+  - Intermediate: Basic harmonies; rhythm enforcement.
+  - Advanced: Orchestral reductions; strict timing.
+
+### 2. Ear Training & Playback Integration
+- **Audio Playback**: Hear scores with colorful waveform visuals syncing to notation.
+  - All levels: Adjustable tempo and instrument colors (e.g., piano in silver, strings in gold).
+- **Dictation Mode**: Listen to melody, notate it. Hints as colorful overlays.
+  - Beginner: Short phrases; pitch/rhythm guides.
+  - Intermediate: Melodies with chords.
+  - Advanced: Complex counterpoint.
+- **Harmonization Exercises**: Add harmonies to given lines.
+  - Beginner: Basic chord suggestions.
+  - Intermediate: Key-based constraints.
+  - Advanced: Voice-leading rules enforced.
+
+### 3. Composition / Notation Creation
+- **Sandbox Mode**: Free-form editor with drag-and-drop tools. Colorful palette for elements (e.g., dynamics in vibrant reds).
+  - Beginner: Single stave templates; auto-snap to grid.
+  - Intermediate: Multi-stave; chord symbols.
+  - Advanced: Full orchestral setup; custom articulations.
+- **Guided Scenarios**: Pre-set templates (e.g., blues progression).
+  - All levels: Export/share options; community voting for shared works.
+- **Import/Export**: From libraries or user scans via OMR.
+
+### 4. Learning / Tutorial Path & Theory Integration
+- **Lessons**: Interactive modules on theory, tied to notation tasks.
+  - Beginner: Basics like note names; colorful animations.
+  - Intermediate: Chords/scales; quizzes with XP.
+  - Advanced: Counterpoint/analysis; deep dives.
+- **Visual Aids**: Overlays (e.g., scale degrees in rainbow colors).
+
+### 5. Gamification & Progress Tracking
+- **Levels and XP**: Earn points for completions; unlock features (e.g., new instruments in colorful themes).
+- **Badges**: E.g., "Melody Master" (Beginner), "Harmony Hero" (Intermediate), "Composition Virtuoso" (Advanced).
+- **Leaderboards**: Filtered by experience group; daily challenges.
+
+### 6. Multimodal Learning
+- **Performance Mode**: Play notated pieces like a rhythm game, with colorful note streams.
+  - Beginner: Slow, forgiving.
+  - Intermediate/Advanced: Faster, with scoring.
+
+### 7. Content Variety
+- **Instruments/Genres**: Piano, guitar, orchestral; classical to pop.
+  - All levels: Filter by difficulty; colorful icons for selection.
+
+### 8. Community & Sharing
+- **Gallery**: Browse/share compositions; colorful thumbnails.
+- **Collaboration**: Real-time editing sessions.
+
+### 9. Interoperability
+- **Format Support**: Import/export standards.
+- **OMR Integration**: Scan and edit real sheets.
+
+### 10. Adaptive & Accessible Design
+- **Difficulty Adjustment**: Auto-scale based on performance.
+- **Colorful Themes**: Switchable for mood (e.g., "Vibrant Practice" vs. "Calm Composition").
+
+## Data-Model Sketch
+Below is a high-level entity-relationship model for the game's data structure. Use this for database schema design.
+
+### Key Entities
+- **User**:
+  - ID (PK), Username, Email, ExperienceGroup (Enum: Beginner/Intermediate/Advanced), XP, Level, Achievements (Array of Badge IDs).
+- **Score**:
+  - ID (PK), UserID (FK), Title, NotationData (JSON/MusicXML string), Genre, Difficulty (Enum: Easy/Medium/Hard), Instruments (Array), AudioRender (Blob/URL).
+- **Challenge**:
+  - ID (PK), Type (e.g., Recognition, Dictation), Content (JSON: notes, audio), ExperienceGroup, Rewards (XP/Badges).
+- **Lesson**:
+  - ID (PK), Topic, Content (Markdown with embeds), Prerequisites (Array of Lesson IDs), Quizzes (Array of Challenge IDs).
+- **Badge**:
+  - ID (PK), Name, Description, IconURL (colorful image), Criteria (JSON: e.g., {completions: 10}).
+- **CommunityPost**:
+  - ID (PK), ScoreID (FK), UserID (FK), Likes, Comments (Array).
+
+### Relationships
+- User 1:N Score (owns compositions).
+- User 1:N ChallengeCompletion (tracks progress).
+- Score 1:N CommunityPost (sharing).
+- Challenge 1:1 Lesson (embedded in tutorials).
+- Use indexes on ExperienceGroup for filtered queries.
+
+This model supports querying by level (e.g., fetch Beginner challenges) and storing colorful metadata (e.g., theme colors in User preferences).
+
+## Implementation Roadmap
+- **MVP (Phase 1)**: Core editor, basic recognition challenges, library imports for Beginners.
+- **Phase 2**: Add ear training, composition for Intermediate; colorful UI polish.
+- **Phase 3**: Advanced features, community, full interoperability.
+
+This spec provides a blueprint for NotaQuest, balancing fun, education, and creativity while embracing colorful design and leveled experiences. If you'd like expansions (e.g., wireframes or cost estimates), let me know!
+(c) Jonathan Z. Holman 2025

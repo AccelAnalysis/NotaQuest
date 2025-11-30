@@ -1,0 +1,251 @@
+This is a comprehensive blueprint and code skeleton for the **NotaQuest** MVP (Minimum Viable Product).
+
+[cite\_start]Based on the **Implementation Roadmap**, this MVP focuses on **Phase 1**: "Core editor, basic recognition challenges, library imports for Beginners"[cite: 66]. [cite\_start]It utilizes the **React.js** frontend framework [cite: 22] [cite\_start]and the **VexFlow** library for notation rendering[cite: 15].
+
+### 1\. Technical Architecture & Design System
+
+**Tech Stack:**
+
+  * [cite\_start]**Frontend:** React.js (Create React App or Vite)[cite: 22].
+  * [cite\_start]**Notation Engine:** VexFlow (Standard for web-based rendering)[cite: 15].
+  * [cite\_start]**Audio:** Tone.js (For synthesized MIDI/audio rendering)[cite: 16].
+  * [cite\_start]**Styling:** CSS Modules with a vibrant color palette[cite: 4].
+
+**Visual Theme (CSS Variables):**
+[cite\_start]To satisfy the requirement for a "colorful visual design" and "themed UI elements"[cite: 4, 6], we define a global palette:
+
+```css
+/* App.css */
+:root {
+  [cite_start]/* Vibrant Palette [cite: 4] */
+  --color-calm-blue: #4facfe;    /* Learning modes */
+  --color-calm-green: #00f260;   /* Correct answers/Learning */
+  --color-intense-red: #ff0844;  /* Errors/Challenge mode */
+  --color-creative-purple: #a18cd1; /* Composition */
+  --color-gold: #fbc2eb;         /* Achievements/Stars */
+  
+  [cite_start]/* UI Elements [cite: 6] */
+  --gradient-btn: linear-gradient(to right, var(--color-calm-blue), var(--color-creative-purple));
+  --bg-pastel: #fdfbf7;          [cite_start]/* Musical motif background base [cite: 5] */
+}
+
+body {
+  background-color: var(--bg-pastel);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+```
+
+-----
+
+### 2\. Frontend Implementation (React)
+
+#### A. Main Application Container
+
+[cite\_start]Manages the user state, specifically the "Beginner" experience group [cite: 9] [cite\_start]and the Gamification Engine (XP System)[cite: 18].
+
+```jsx
+// App.js
+import React, { useState } from 'react';
+import NotationGame from './components/NotationGame';
+import UserProfile from './components/UserProfile';
+import './App.css';
+
+function App() {
+  [cite_start]// User Authentication & Profile placeholder [cite: 13]
+  const [user, setUser] = useState({
+    username: "NewStudent",
+    [cite_start]experienceGroup: "Beginner", // MVP focuses on Beginner [cite: 66]
+    xp: 0,
+    level: 1
+  });
+
+  const handleScoreUpdate = (points) => {
+    [cite_start]// Gamification Engine: XP system [cite: 18]
+    setUser(prev => ({
+      ...prev,
+      xp: prev.xp + points,
+      level: Math.floor((prev.xp + points) / 100) + 1 // Simple leveling logic
+    }));
+  };
+
+  return (
+    <div className="app-container">
+      <header style={{ background: 'var(--gradient-btn)', padding: '20px', color: 'white' }}>
+        <h1>NotaQuest</h1>
+        <UserProfile user={user} />
+      </header>
+      
+      <main>
+        [cite_start]{/* Phase 1: Basic Recognition Challenges [cite: 66] */}
+        <NotationGame 
+          difficulty="Beginner" 
+          onScore={handleScoreUpdate} 
+        />
+      </main>
+    </div>
+  );
+}
+
+export default App;
+```
+
+#### B. The Notation Game Component (Flash-Card Challenge)
+
+[cite\_start]This implements the "Flash-Card Challenges" feature[cite: 31]. [cite\_start]For the MVP, it handles "Single notes on treble clef"[cite: 32].
+
+```jsx
+// components/NotationGame.js
+import React, { useEffect, useRef, useState } from 'react';
+import Vex from 'vexflow';
+import { playSound } from '../utils/audio'; // Placeholder for Tone.js
+import styles from './NotationGame.module.css';
+
+const NotationGame = ({ difficulty, onScore }) => {
+  const containerRef = useRef(null);
+  const [currentNote, setCurrentNote] = useState('c/4'); // Middle C
+  const [feedback, setFeedback] = useState(null); // 'correct' or 'error'
+
+  [cite_start]// Notes to guess (Beginner: Treble Clef Basics) [cite: 32]
+  const notes = ['c/4', 'd/4', 'e/4', 'f/4', 'g/4', 'a/4', 'b/4'];
+
+  const drawNotation = (noteKey) => {
+    // Clear previous
+    containerRef.current.innerHTML = '';
+    
+    const VF = Vex.Flow;
+    const renderer = new VF.Renderer(containerRef.current, VF.Renderer.Backends.SVG);
+    renderer.resize(200, 200);
+    const context = renderer.getContext();
+    
+    [cite_start]// Colorful visual design: Stave in pastel/black [cite: 5]
+    const stave = new VF.Stave(10, 40, 150);
+    stave.addClef("treble").setContext(context).draw();
+
+    [cite_start]// Color-coded notes logic [cite: 32]
+    // e.g., C in blue, D in green.
+    const noteColor = noteKey.startsWith('c') ? '#4facfe' : 'black';
+
+    const note = new VF.StaveNote({ keys: [noteKey], duration: "q" });
+    note.setStyle({ fillStyle: noteColor, strokeStyle: noteColor }); // VexFlow coloring
+    
+    const voice = new VF.Voice({ num_beats: 1, beat_value: 4 });
+    voice.addTickables([note]);
+    
+    new VF.Formatter().joinVoices([voice]).format([voice], 120);
+    voice.draw(context, stave);
+  };
+
+  useEffect(() => {
+    drawNotation(currentNote);
+  }, [currentNote]);
+
+  const handleGuess = (guess) => {
+    const actualNoteLetter = currentNote.split('/')[0].toUpperCase();
+    
+    if (guess === actualNoteLetter) {
+      [cite_start]// Correct: Green highlight, Particle effect placeholder [cite: 7, 35]
+      setFeedback('correct');
+      onScore(10); [cite_start]// XP Reward [cite: 30]
+      playSound('success'); // Audio feedback
+      
+      // Next card
+      setTimeout(() => {
+        setFeedback(null);
+        setCurrentNote(notes[Math.floor(Math.random() * notes.length)]);
+      }, 1000);
+    } else {
+      [cite_start]// Error: Red highlight [cite: 35]
+      setFeedback('error');
+      playSound('error');
+    }
+  };
+
+  return (
+    <div className={styles.gameBoard}>
+      <h2>Flash Card Challenge</h2>
+      <div 
+        ref={containerRef} 
+        className={`${styles.notationBox} ${feedback === 'correct' ? styles.flashGreen : feedback === 'error' ? styles.flashRed : ''}`}
+      ></div>
+      
+      <div className={styles.controls}>
+        {['C', 'D', 'E', 'F', 'G', 'A', 'B'].map((note) => (
+          <button 
+            key={note} 
+            onClick={() => handleGuess(note)}
+            className={styles.noteBtn}
+          >
+            {note}
+          </button>
+        ))}
+      </div>
+      
+      [cite_start]{/* Usability: Colorful tooltips/hints [cite: 27] */}
+      {feedback === 'error' && <p className={styles.hint}>Hint: Remember FACE for spaces!</p>}
+    </div>
+  );
+};
+
+export default NotationGame;
+```
+
+-----
+
+### 3\. Database Schema (PostgreSQL)
+
+[cite\_start]Based on the **Data-Model Sketch**, here is the SQL schema required to support the backend[cite: 57].
+
+```sql
+[cite_start]-- Users Table [cite: 58]
+CREATE TYPE experience_level AS ENUM ('Beginner', 'Intermediate', 'Advanced');
+
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    experience_group experience_level DEFAULT 'Beginner',
+    xp INTEGER DEFAULT 0,
+    level INTEGER DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+[cite_start]-- Achievements/Badges Tracking [cite: 58, 62]
+CREATE TABLE user_badges (
+    user_id INTEGER REFERENCES users(user_id),
+    badge_id INTEGER, -- References a badge lookup table
+    awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, badge_id)
+);
+
+[cite_start]-- Scores (User Compositions) [cite: 59]
+-- Essential for the "Core Editor" requirement of MVP
+CREATE TABLE scores (
+    score_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(user_id),
+    title VARCHAR(100),
+    notation_data JSONB, -- Storing MusicXML or internal JSON representation
+    difficulty VARCHAR(20),
+    [cite_start]is_public BOOLEAN DEFAULT FALSE, -- For Community Features [cite: 19]
+    audio_url TEXT -- URL to rendered audio blob
+);
+
+[cite_start]-- Challenges [cite: 60]
+CREATE TABLE challenges (
+    challenge_id SERIAL PRIMARY KEY,
+    type VARCHAR(50), -- e.g., 'Recognition'
+    content JSONB, -- The note data e.g., {"correct": "C4", "options": [...]}
+    target_group experience_level
+);
+```
+
+-----
+
+### 4\. Implementation Details for MVP Features
+
+  * [cite\_start]**Content Sourcing:** To handle "Content Sourcing"[cite: 14], the `notation_data` field in the database utilizes JSONB. [cite\_start]This allows the app to parse MusicXML files (from IMSLP or Mutopia) on the server side (using the Python/Node Partitura library [cite: 23]) and store them as lightweight JSON for the frontend VexFlow renderer.
+  * [cite\_start]**Accessibility:** To meet "Accessibility in color"[cite: 8], the CSS variables defined in step 1 should be swappable via a Javascript context provider (e.g., `ThemeContext`) to switch to High Contrast Mode.
+  * [cite\_start]**Performance:** The frontend uses React `useRef` for the VexFlow canvas to ensure the DOM is only manipulated when the note state changes, aiming for the `<2 seconds` load time and smooth rendering[cite: 26].
+
+### 5\. Next Steps
+
+Would you like me to generate the **Node.js/Express backend code** to handle the user authentication and XP tracking, or should we refine the **VexFlow logic** to include the specific "Sandbox Mode" for composition?
