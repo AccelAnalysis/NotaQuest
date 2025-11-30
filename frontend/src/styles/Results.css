@@ -1,0 +1,125 @@
+.results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.results-container h1 {
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+  color: #e94560;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.score-display {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.score-display h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #0f3460;
+}
+
+.score {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #e94560;
+  margin: 1rem 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.message {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.button-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.play-again-button,
+.home-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+}
+
+.play-again-button {
+  background: #e94560;
+  color: white;
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+}
+
+.play-again-button:hover {
+  background: #ff5c7c;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(233, 69, 96, 0.6);
+}
+
+.home-button {
+  background: transparent;
+  color: #0f3460;
+  border: 2px solid #0f3460;
+}
+
+.home-button:hover {
+  background: rgba(15, 52, 96, 0.1);
+  transform: translateY(-3px);
+}
+
+.play-again-button:active,
+.home-button:active {
+  transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .button-group {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .play-again-button,
+  .home-button {
+    width: 100%;
+  }
+  
+  .results-container h1 {
+    font-size: 2.5rem;
+  }
+  
+  .score {
+    font-size: 3rem;
+  }
+  
+  .message {
+    font-size: 1.2rem;
+  }
+}

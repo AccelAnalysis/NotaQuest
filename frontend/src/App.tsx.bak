@@ -1,0 +1,117 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import GameController from './controllers/GameController';
+import StaffDisplay from './components/StaffDisplay';
+import NoteRenderer from './components/NoteRenderer';
+import AnswerButtons from './components/AnswerButtons';
+import type { Note } from './utils/music';
+
+const App: React.FC = () => {
+  const [game, setGame] = useState<GameController | null>(null);
+  const [currentNote, setCurrentNote] = useState<Note | null>(null);
+  const [score, setScore] = useState(0);
+  const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+
+  // Use a ref to store the game instance
+  const gameRef = React.useRef<GameController | null>(null);
+
+  useEffect(() => {
+    // Only create the game instance if it doesn't exist
+    if (!gameRef.current) {
+      const onScoreUpdate = (newScore: number) => setScore(newScore);
+      const onGameStart = () => {
+        setScore(0);
+        setFeedback(null);
+      };
+      
+      // Create and store the game instance in the ref
+      gameRef.current = new GameController({
+        onScoreUpdate,
+        onGameStart,
+      });
+      
+      // Set the game state and start the game in a single state update
+      setGame(gameRef.current);
+      
+      // Start the game after the component has mounted and state is updated
+      const timer = setTimeout(() => {
+        if (gameRef.current) {
+          gameRef.current.start();
+        }
+      }, 0);
+
+      return () => {
+        clearTimeout(timer);
+        // Cleanup if needed
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!game) return;
+
+    const interval = setInterval(() => {
+      setCurrentNote(game.getCurrentNote());
+      setFeedback(game.getFeedback());
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [game]);
+
+  const handleAnswer = useCallback((noteId: string) => {
+    game?.submitAnswer(noteId);
+  }, [game]);
+
+  const playNote = useCallback(() => {
+    if (currentNote) {
+      game?.playCurrentNote();
+    }
+  }, [currentNote, game]);
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+      <h1 className="text-3xl font-bold mb-8">NotaQuest</h1>
+      
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6">
+        <div className="text-right mb-4">
+          <span className="text-2xl font-bold">Score: {score}</span>
+        </div>
+
+        <div className="mb-8">
+          <StaffDisplay>
+            {currentNote && (
+              <NoteRenderer 
+                noteId={currentNote.id}
+                staffPosition={currentNote.staffPosition}
+              />
+            )}
+          </StaffDisplay>
+          
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={playNote}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+            >
+              Play Note Again
+            </button>
+          </div>
+        </div>
+
+        <AnswerButtons 
+          onAnswer={handleAnswer} 
+          disabled={feedback !== null}
+          className={feedback ? 'opacity-50' : ''}
+        />
+
+        {feedback && (
+          <div className={`mt-4 text-center text-xl font-bold ${
+            feedback === 'correct' ? 'text-green-600' : 'text-red-600'
+          }`}>
+            {feedback === 'correct' ? '✓ Correct!' : '✗ Try Again!'}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;

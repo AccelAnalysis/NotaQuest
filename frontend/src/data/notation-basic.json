@@ -1,0 +1,11 @@
+{
+  "notes": [
+    { "id": "A", "midi": 69, "staffPosition": 0 },
+    { "id": "B", "midi": 71, "staffPosition": 1 },
+    { "id": "C", "midi": 60, "staffPosition": 2 },
+    { "id": "D", "midi": 62, "staffPosition": 3 },
+    { "id": "E", "midi": 64, "staffPosition": 4 },
+    { "id": "F", "midi": 65, "staffPosition": 5 },
+    { "id": "G", "midi": 67, "staffPosition": 6 }
+  ]
+}

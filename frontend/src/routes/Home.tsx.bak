@@ -1,0 +1,61 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/Home.css';
+
+type GameMode = 'treble' | 'bass' | 'both';
+
+export default function Home() {
+  const [selectedMode, setSelectedMode] = useState<GameMode>('treble');
+  const navigate = useNavigate();
+
+  const startGame = () => {
+    navigate(`/play?mode=${selectedMode}`);
+  };
+
+  return (
+    <div className="home-container">
+      <h1>Music Notes Game</h1>
+      <div className="mode-selection">
+        <h2>Select Game Mode</h2>
+        <div className="mode-options">
+          <label className={`mode-option ${selectedMode === 'treble' ? 'selected' : ''}`}>
+            <input
+              type="radio"
+              name="gameMode"
+              value="treble"
+              checked={selectedMode === 'treble'}
+              onChange={() => setSelectedMode('treble')}
+            />
+            Treble Clef
+          </label>
+          
+          <label className={`mode-option ${selectedMode === 'bass' ? 'selected' : ''}`}>
+            <input
+              type="radio"
+              name="gameMode"
+              value="bass"
+              checked={selectedMode === 'bass'}
+              onChange={() => setSelectedMode('bass')}
+            />
+            Bass Clef
+          </label>
+          
+          <label className={`mode-option ${selectedMode === 'both' ? 'selected' : ''}`}>
+            <input
+              type="radio"
+              name="gameMode"
+              value="both"
+              checked={selectedMode === 'both'}
+              onChange={() => setSelectedMode('both')}
+            />
+            Both Clefs
+          </label>
+        </div>
+      </div>
+      
+      <button className="start-button" onClick={startGame}>
+        Start Game
+      </button>
+    </div>
+  );
+}
