@@ -5,8 +5,6 @@ import { motion } from 'framer-motion';
 import { getProfile } from '../services/gamification';
 import { useAuth } from '../context/AuthContext';
 import NavBar from '../components/NavBar';
-import '../styles/Home.css';
-
 type GameMode = 'treble' | 'bass' | 'both';
 
 const gameModes = [
