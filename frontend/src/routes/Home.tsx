@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaGamepad, FaMusic, FaArrowRight, FaChevronDown } from 'react-icons/fa';
+import { FaGamepad, FaMusic, FaArrowRight, FaGuitar, FaLayerGroup } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { getProfile } from '../services/gamification';
 import { useAuth } from '../context/AuthContext';
@@ -10,14 +10,41 @@ import '../styles/Home.css';
 type GameMode = 'treble' | 'bass' | 'both';
 
 const gameModes = [
-  { id: 'treble', name: 'Treble Clef', description: 'Learn notes in the treble clef' },
-  { id: 'bass', name: 'Bass Clef', description: 'Master the bass clef' },
-  { id: 'both', name: 'Both Clefs', description: 'Challenge yourself with both clefs' },
-];
+  {
+    id: 'treble',
+    name: 'Treble Clef',
+    description: 'Learn notes on the upper staff with melody-friendly drills.',
+    focus: 'Staff focus: Lines & spaces above middle C',
+    recommendation: 'Recommended for vocalists, violin, flute, and clarinet players.',
+    icon: FaMusic
+  },
+  {
+    id: 'bass',
+    name: 'Bass Clef',
+    description: 'Master low-end notes with rhythmic anchoring exercises.',
+    focus: 'Staff focus: Lines & spaces below middle C',
+    recommendation: 'Recommended for bass, cello, trombone, and tuba players.',
+    icon: FaGuitar
+  },
+  {
+    id: 'both',
+    name: 'Both Clefs',
+    description: 'Challenge yourself by switching between treble and bass.',
+    focus: 'Staff focus: Full grand staff coverage',
+    recommendation: 'Recommended for pianists, composers, and theory refreshers.',
+    icon: FaLayerGroup
+  }
+] satisfies Array<{
+  id: GameMode;
+  name: string;
+  description: string;
+  focus: string;
+  recommendation: string;
+  icon: typeof FaMusic;
+}>;
 
 export default function Home() {
   const [selectedMode, setSelectedMode] = useState<GameMode>('treble');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // Profile state will be used in a future update
   const [profile] = useState<{ level: number; xp: number } | null>(null);
   const [isLoading] = useState(false);
@@ -50,8 +77,6 @@ export default function Home() {
   const startGame = () => {
     navigate(`/play?mode=${selectedMode}`);
   };
-
-  const selectedGameMode = gameModes.find(mode => mode.id === selectedMode);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
@@ -92,40 +117,51 @@ export default function Home() {
             </p>
 
             {/* Game Mode Selection */}
-            <div className="max-w-md mx-auto mb-10">
-              <div className="relative">
-                <button
-                  type="button"
-                  className="w-full bg-gray-800/80 border border-gray-700 rounded-xl py-4 px-6 text-left flex items-center justify-between hover:bg-gray-800 transition-colors duration-200"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  <div>
-                    <p className="text-sm text-gray-400">Game Mode</p>
-                    <p className="text-white font-medium">{selectedGameMode?.name}</p>
-                    <p className="text-sm text-gray-400 mt-1">{selectedGameMode?.description}</p>
-                  </div>
-                  <FaChevronDown className={`text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'transform rotate-180' : ''}`} />
-                </button>
-                
-                {isDropdownOpen && (
-                  <div className="absolute z-10 mt-1 w-full bg-gray-800 border border-gray-700 rounded-xl shadow-lg">
-                    {gameModes.map((mode) => (
-                      <div
-                        key={mode.id}
-                        className={`px-6 py-3 cursor-pointer hover:bg-gray-700/50 transition-colors duration-150 ${
-                          selectedMode === mode.id ? 'bg-indigo-900/30' : ''
-                        }`}
-                        onClick={() => {
-                          setSelectedMode(mode.id as GameMode);
-                          setIsDropdownOpen(false);
-                        }}
-                      >
-                        <p className="text-white font-medium">{mode.name}</p>
-                        <p className="text-sm text-gray-400">{mode.description}</p>
+            <div className="max-w-5xl mx-auto mb-10 w-full">
+              <p className="text-sm text-indigo-200 uppercase tracking-[0.2em] mb-3">Choose your focus</p>
+              <div className="grid gap-4 md:gap-6 md:grid-cols-3">
+                {gameModes.map((mode) => {
+                  const Icon = mode.icon;
+                  const isSelected = selectedMode === mode.id;
+
+                  return (
+                    <button
+                      key={mode.id}
+                      type="button"
+                      onClick={() => setSelectedMode(mode.id)}
+                      className={`group relative w-full text-left rounded-2xl border transition-all duration-300 p-6 backdrop-blur bg-gray-800/60 hover:bg-gray-800/90 hover:-translate-y-1 ${
+                        isSelected ? 'border-indigo-500/70 shadow-lg shadow-indigo-500/20' : 'border-gray-700'
+                      }`}
+                    >
+                      <div className="flex items-start gap-4">
+                        <div
+                          className={`rounded-xl p-3 flex items-center justify-center shrink-0 transition-colors duration-300 ${
+                            isSelected ? 'bg-indigo-600 text-white' : 'bg-indigo-900/40 text-indigo-200'
+                          }`}
+                        >
+                          <Icon className="h-6 w-6" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs uppercase tracking-[0.18em] text-indigo-300 mb-1">{mode.focus}</p>
+                          <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+                            {mode.name}
+                            {isSelected && <span className="text-xs font-medium text-indigo-200 bg-indigo-900/50 px-2 py-0.5 rounded-full">Selected</span>}
+                          </h3>
+                          <p className="text-sm text-gray-300 mb-3 leading-relaxed">{mode.description}</p>
+                          <p className="text-xs text-indigo-200 bg-indigo-900/40 border border-indigo-700/50 rounded-lg px-3 py-2 inline-flex items-center gap-2">
+                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-indigo-400" />
+                            {mode.recommendation}
+                          </p>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                      <div
+                        className={`absolute inset-0 rounded-2xl border pointer-events-none transition-opacity duration-300 ${
+                          isSelected ? 'border-indigo-400/40 opacity-100' : 'border-transparent opacity-0 group-hover:opacity-100 group-hover:border-indigo-300/30'
+                        }`}
+                      ></div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
